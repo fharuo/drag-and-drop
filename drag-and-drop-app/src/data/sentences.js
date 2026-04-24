@@ -1,34 +1,51 @@
-const sentences = [
+export const OPTIONS = [
+  { label: 'Pertencer', colorClass: 'chip-pertencer' },
+  { label: 'Inspirar',  colorClass: 'chip-inspirar'  },
+  { label: 'Impactar',  colorClass: 'chip-impactar'  },
+  { label: 'Crescer',   colorClass: 'chip-crescer'   },
+];
+
+const questions = [
   {
     id: 1,
-    text: 'A ___ é o alicerce que sustenta todas as relações de confiança dentro de uma organização.',
-    answer: 'integridade',
-    options: ['integridade', 'produtividade', 'hierarquia', 'lucro', 'eficiência'],
+    text: 'Celebrar as diferenças que tornam nosso time mais forte.',
+    answer: 'Pertencer',
   },
   {
     id: 2,
-    text: 'Empresas que valorizam a ___ criam produtos e soluções que transformam o mercado.',
-    answer: 'inovação',
-    options: ['inovação', 'rotina', 'tradição', 'estabilidade', 'conformidade'],
+    text: 'Usar a curiosidade como motor para encontrar novas soluções.',
+    answer: 'Inspirar',
   },
   {
     id: 3,
-    text: 'O sucesso coletivo nasce da ___ entre pessoas com diferentes perspectivas e habilidades.',
-    answer: 'colaboração',
-    options: ['colaboração', 'competição', 'individualismo', 'meritocracia', 'hierarquia'],
+    text: 'Pensar em como cada decisão afeta as pessoas que atendemos.',
+    answer: 'Impactar',
   },
   {
     id: 4,
-    text: 'Uma cultura que promove a ___ fortalece a criatividade e melhora a tomada de decisão.',
-    answer: 'diversidade',
-    options: ['diversidade', 'uniformidade', 'padronização', 'seletividade', 'exclusividade'],
+    text: 'Assumir um desafio novo que vai além da zona de conforto.',
+    answer: 'Crescer',
   },
   {
     id: 5,
-    text: 'Crescer de forma responsável exige que a ___ esteja presente em todas as decisões estratégicas.',
-    answer: 'sustentabilidade',
-    options: ['sustentabilidade', 'rentabilidade', 'produtividade', 'velocidade', 'agilidade'],
+    text: 'Contagiar o time com entusiasmo para enfrentar um desafio difícil.',
+    answer: 'Inspirar',
+  },
+  {
+    id: 6,
+    text: 'Gerar resultados com propósito e fazer o trabalho chegar mais longe.',
+    answer: 'Impactar',
+  },
+  {
+    id: 7,
+    text: 'Lembrar que cada ação cotidiana pode gerar mudança significativa.',
+    answer: 'Pertencer',
+  },
+  {
+    id: 8,
+    text: 'Encarar metas difíceis como oportunidades de evolução.',
+    answer: 'Crescer',
   },
 ];
 
-export default sentences;
+export default questions;

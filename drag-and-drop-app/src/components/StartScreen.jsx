@@ -1,40 +1,45 @@
-import companyLogo from '../assets/company-logo.svg';
-import DotPattern from './DotPattern';
+import { useState } from 'react';
 
 export default function StartScreen({ onStart }) {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!nome.trim() || !email.trim()) return;
+    onStart({ nome, email });
+  }
+
   return (
-    <div className="screen start-screen">
-      <DotPattern position="top-left" />
-
-      <img src={companyLogo} alt="Logo da Empresa" className="brand-logo" />
-
-      <h1>Bem-vindos!</h1>
-
-      <p className="start-description">
-        Neste jogo você irá arrastar a palavra correta para completar frases
-        sobre os valores que nos guiam como organização.
+    <div className="card-inner start-card">
+      <p className="start-text">
+        Você já parou para pensar como suas atitudes impactam o ambiente de trabalho?
+      </p>
+      <p className="start-text">
+        Neste jogo rápido, você vai responder a algumas situações do dia a dia e descobrir qual pilar da nossa cultura está mais presente na sua forma de agir.
       </p>
 
-      <div className="start-info">
-        <div className="info-item">
-          <span className="info-icon">📋</span>
-          <span>5 frases para completar</span>
-        </div>
-        <div className="info-item">
-          <span className="info-icon">✋</span>
-          <span>Arraste a palavra certa para o espaço em branco</span>
-        </div>
-        <div className="info-item">
-          <span className="info-icon">🏆</span>
-          <span>Veja sua pontuação ao final</span>
-        </div>
-      </div>
-
-      <button className="btn btn-primary btn-lg" onClick={onStart}>
-        Iniciar
-      </button>
-
-      <DotPattern position="bottom-right" />
+      <form onSubmit={handleSubmit}>
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          autoComplete="given-name"
+        />
+        <input
+          className="input-field"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
+        />
+        <button className="btn-action" type="submit" disabled={!nome.trim() || !email.trim()}>
+          Começar
+        </button>
+      </form>
     </div>
   );
 }

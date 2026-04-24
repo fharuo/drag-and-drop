@@ -1,114 +1,94 @@
-import { useState } from 'react';
-import sentences from '../data/sentences';
+import { useState, useEffect } from 'react';
+import questions, { OPTIONS } from '../data/sentences';
 import WordChip from './WordChip';
 
 export default function DragDropGame({ onFinish }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [filledWord, setFilledWord] = useState(null);
+  const [placedChip, setPlacedChip] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
   const [score, setScore] = useState(0);
   const [slideClass, setSlideClass] = useState('slide-in');
+  const [dzHover, setDzHover] = useState(false);
 
-  const sentence = sentences[currentIndex];
-  const isLast = currentIndex === sentences.length - 1;
-  const parts = sentence.text.split('___');
+  const question = questions[currentIndex];
+  const isLast = currentIndex === questions.length - 1;
+
+  useEffect(() => {
+    if (!placedChip || answered) return;
+
+    const validate = setTimeout(() => {
+      const correct = placedChip === question.answer;
+      const newScore = correct ? score + 1 : score;
+      if (correct) setScore(newScore);
+      setIsCorrect(correct);
+      setAnswered(true);
+
+      setTimeout(() => {
+        if (isLast) { onFinish(newScore); return; }
+        setSlideClass('slide-out');
+        setTimeout(() => {
+          setPlacedChip(null);
+          setIsCorrect(null);
+          setAnswered(false);
+          setCurrentIndex((i) => i + 1);
+          setSlideClass('slide-in');
+        }, 350);
+      }, 1500);
+    }, 700);
+
+    return () => clearTimeout(validate);
+  }, [placedChip, answered, question, score, isLast, onFinish]);
 
   function handleDrop(word) {
     if (answered) return;
-    setFilledWord(word);
+    setPlacedChip(word);
   }
 
-  function handleConfirm() {
-    if (!filledWord || answered) return;
+  const dzClass = [
+    'top-drop-zone',
+    dzHover && !placedChip ? 'dz-hover' : '',
+    placedChip ? 'dz-filled' : '',
+    answered ? (isCorrect ? 'dz-correct' : 'dz-wrong') : '',
+  ].filter(Boolean).join(' ');
 
-    const correct = filledWord === sentence.answer;
-    const newScore = correct ? score + 1 : score;
-    if (correct) setScore(newScore);
-    setIsCorrect(correct);
-    setAnswered(true);
-
-    setTimeout(() => {
-      if (isLast) {
-        onFinish(newScore);
-        return;
-      }
-      setSlideClass('slide-out');
-      setTimeout(() => {
-        setFilledWord(null);
-        setIsCorrect(null);
-        setAnswered(false);
-        setCurrentIndex((i) => i + 1);
-        setSlideClass('slide-in');
-      }, 400);
-    }, 1500);
-  }
-
-  function handleClearDrop() {
-    if (!answered) setFilledWord(null);
-  }
-
-  const dropZoneClass = [
-    'drop-zone',
-    filledWord ? 'drop-zone-filled' : '',
-    answered && isCorrect ? 'drop-zone-correct' : '',
-    answered && !isCorrect ? 'drop-zone-incorrect' : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const placedOption = OPTIONS.find((o) => o.label === placedChip);
 
   return (
-    <div className="screen game-screen">
-      <div className="quiz-dots-indicator">
-        {sentences.map((_, i) => (
-          <span key={i} className={`quiz-dot ${i <= currentIndex ? 'active' : ''}`} />
-        ))}
+    <div className="card-inner game-card">
+      <div className="progress-counter">
+        {currentIndex + 1}<span>/{questions.length}</span>
       </div>
 
-      <div key={currentIndex} className={`question-card ${slideClass}`}>
-        <p className="sentence-hint">Complete a frase arrastando a palavra correta:</p>
+      <div key={currentIndex} className={`question-slide ${slideClass}`}>
+        <p className="question-sentence">{question.text}</p>
+        <p className="pillar-label">Qual é este pilar?</p>
 
-        <div className="sentence-wrapper">
-          <p className="sentence-text">
-            <span>{parts[0]}</span>
-            <span
-              id="sentence-drop-zone"
-              className={dropZoneClass}
-              onClick={handleClearDrop}
-              title={filledWord && !answered ? 'Toque para remover' : undefined}
-            >
-              {filledWord || <span className="drop-zone-placeholder">arraste aqui</span>}
-            </span>
-            <span>{parts[1]}</span>
-          </p>
+        <div id="drop-zone" className={dzClass}>
+          {placedChip ? (
+            <span className={`placed-chip ${placedOption?.colorClass}`}>{placedChip}</span>
+          ) : (
+            <span className="dz-hint">arraste aqui</span>
+          )}
         </div>
 
-        {answered && (
-          <p className={`feedback-text ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`}>
-            {isCorrect ? '✓ Correto!' : `✗ A resposta certa é "${sentence.answer}"`}
-          </p>
-        )}
-
-        <div className="chips-container">
-          {sentence.options.map((word) => (
-            <WordChip
-              key={word}
-              word={word}
-              answered={answered}
-              isAnswer={word === sentence.answer}
-              isPlaced={filledWord === word}
-              onDrop={handleDrop}
-            />
-          ))}
+        <div className="chips-grid">
+          {OPTIONS.map((opt) =>
+            opt.label === placedChip ? (
+              <div key={opt.label} className="chip-empty-slot" />
+            ) : (
+              <WordChip
+                key={opt.label}
+                word={opt.label}
+                colorClass={opt.colorClass}
+                answered={answered}
+                isCorrectAnswer={opt.label === question.answer}
+                onDrop={handleDrop}
+                onHoverChange={setDzHover}
+              />
+            )
+          )}
         </div>
-
-        <button
-          className="btn btn-primary btn-lg"
-          onClick={handleConfirm}
-          disabled={!filledWord || answered}
-        >
-          Confirmar
-        </button>
       </div>
     </div>
   );
