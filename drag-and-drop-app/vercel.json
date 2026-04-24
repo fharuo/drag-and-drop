@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/app/drag-and-drop", "destination": "/" },
+    { "source": "/app/drag-and-drop/(.*)", "destination": "/$1" }
+  ],
+  "redirects": [
+    { "source": "/", "destination": "/app/drag-and-drop", "statusCode": 302 }
+  ]
+}
