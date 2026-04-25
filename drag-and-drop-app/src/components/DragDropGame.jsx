@@ -8,6 +8,7 @@ export default function DragDropGame({ onFinish }) {
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
   const [score, setScore] = useState(0);
+  const [answers, setAnswers] = useState([]);
   const [slideClass, setSlideClass] = useState('slide-in');
   const [dzHover, setDzHover] = useState(false);
 
@@ -20,12 +21,15 @@ export default function DragDropGame({ onFinish }) {
     const validate = setTimeout(() => {
       const correct = placedChip === question.answer;
       const newScore = correct ? score + 1 : score;
+      const newAnswers = [...answers, placedChip];
+
       if (correct) setScore(newScore);
+      setAnswers(newAnswers);
       setIsCorrect(correct);
       setAnswered(true);
 
       setTimeout(() => {
-        if (isLast) { onFinish(newScore); return; }
+        if (isLast) { onFinish(newScore, newAnswers); return; }
         setSlideClass('slide-out');
         setTimeout(() => {
           setPlacedChip(null);
@@ -38,7 +42,7 @@ export default function DragDropGame({ onFinish }) {
     }, 700);
 
     return () => clearTimeout(validate);
-  }, [placedChip, answered, question, score, isLast, onFinish]);
+  }, [placedChip, answered, question, score, answers, isLast, onFinish]);
 
   function handleDrop(word) {
     if (answered) return;

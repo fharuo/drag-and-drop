@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import StartScreen from './components/StartScreen';
 import DragDropGame from './components/DragDropGame';
 import Result from './components/Result';
+import { saveToSheets } from './utils/sheets';
 import pluxeeLogo from './assets/pluxee_logo.png';
 import './App.css';
 
@@ -9,11 +10,25 @@ const SCREENS = { START: 'start', GAME: 'game', RESULT: 'result' };
 
 function App() {
   const [screen, setScreen] = useState(SCREENS.START);
+  const [userData, setUserData] = useState(null);
   const [finalScore, setFinalScore] = useState(0);
 
-  const handleStart = useCallback(() => setScreen(SCREENS.GAME), []);
-  const handleFinish = useCallback((score) => { setFinalScore(score); setScreen(SCREENS.RESULT); }, []);
-  const handleRestart = useCallback(() => { setFinalScore(0); setScreen(SCREENS.START); }, []);
+  const handleStart = useCallback((data) => {
+    setUserData(data);
+    setScreen(SCREENS.GAME);
+  }, []);
+
+  const handleFinish = useCallback((score, respostas) => {
+    setFinalScore(score);
+    saveToSheets({ nome: userData.nome, email: userData.email, score, respostas });
+    setScreen(SCREENS.RESULT);
+  }, [userData]);
+
+  const handleRestart = useCallback(() => {
+    setFinalScore(0);
+    setUserData(null);
+    setScreen(SCREENS.START);
+  }, []);
 
   return (
     <div className="app-layout">
