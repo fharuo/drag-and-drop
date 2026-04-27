@@ -23,7 +23,7 @@ export default function StartScreen({ onStart }) {
         <input
           className="input-field"
           type="text"
-          placeholder="Nome"
+          placeholder="Nome Completo"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           autoComplete="given-name"
@@ -31,7 +31,7 @@ export default function StartScreen({ onStart }) {
         <input
           className="input-field"
           type="email"
-          placeholder="Email"
+          placeholder="Email Corporativo"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"

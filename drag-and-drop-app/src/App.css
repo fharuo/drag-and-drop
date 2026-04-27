@@ -2,11 +2,11 @@
    BRAND COLORS
    ============================================= */
 :root {
-  --navy:   #1B2245;
-  --cyan:   #2AD4E0;
-  --yellow: #FFD200;
-  --salmon: #FF7B6B;
-  --green:  #39DB78;
+  --navy:   #231c48;
+  --cyan:   #00cefd;
+  --yellow: #ffd900;
+  --salmon: #fe6770;
+  --green:  #00ed43;
   --white:  #ffffff;
 }
 
@@ -21,23 +21,24 @@
 
 /* ---- Left panel ---- */
 .left-panel {
-  width: 38%;
-  min-width: 220px;
-  max-width: 340px;
+  width: 30%;
+  min-width: 200px;
   background: var(--white);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 40px 36px;
+  padding: 40px 20px;
   flex-shrink: 0;
 }
 
 .brand-headline {
   font-family: 'Anton', Impact, sans-serif;
-  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-size: clamp(4rem, min(18vh, 12.5vw), 15rem);
   color: var(--navy);
   line-height: 0.92;
   letter-spacing: 0.01em;
+  transform: scaleX(1.6);
+  transform-origin: left center;
 }
 
 .pluxee-logo {
